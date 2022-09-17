@@ -13,6 +13,18 @@ export const useStore = create(
 				const response = await axios.get(api);
 				set({ loading: false, movies: await response.data.results });
 			},
+			filter: "",
+			setFilter: (filter) =>
+				set((state) => ({
+					...state,
+					filter,
+				})),
+			cart: "",
+			addToCart: (cart) =>
+				set((state) => ({
+					...state,
+					cart,
+				})),
 		}),
 		{
 			name: "themoviedb-storage",
