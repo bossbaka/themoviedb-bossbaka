@@ -1,34 +1,54 @@
-import { useState } from 'react'
-import reactLogo from './assets/react.svg'
-import './App.css'
+import { useEffect, useRef } from "react";
+import { useStore } from "./store/store";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { createTheme, ThemeProvider } from "@mui/material/styles";
+import Layout from "./view/Layout";
+import Home from "./pages/Home";
+import NotFound from "./pages/NotFound";
 
 function App() {
-  const [count, setCount] = useState(0)
+	const effectRan = useRef(false);
+	const movies = useStore((state) => state.movies);
+	const fetchMovies = useStore((state) => state.fetchMovies);
+	useEffect(() => {
+		console.log("ran");
+		if (effectRan.current === true) {
+			fetchMovies();
+		}
+		return () => {
+			console.log("un");
+			effectRan.current = true;
+		};
+	}, []);
 
-  return (
-    <div className="App">
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.jsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </div>
-  )
+	const theme = createTheme({
+		typography: {
+			fontFamily: "'Prompt'",
+			textTransform: "none",
+		},
+		breakpoints: {
+			values: {
+				xs: 0,
+				sm: 600,
+				md: 900,
+				lg: 1200,
+				xl: 1536,
+			},
+		},
+	});
+	console.log(movies);
+	return (
+		<BrowserRouter>
+			<ThemeProvider theme={theme}>
+				<Routes>
+					<Route path="/" element={<Layout />}>
+						<Route index element={<Home />} />
+					</Route>
+					<Route path="*" element={<NotFound />} />
+				</Routes>
+			</ThemeProvider>
+		</BrowserRouter>
+	);
 }
 
-export default App
+export default App;
