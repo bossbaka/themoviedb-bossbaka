@@ -1,8 +1,10 @@
 import React from "react";
-import { Grid, ImageListItem, ImageListItemBar, IconButton } from "@mui/material";
+import { Grid, ImageListItem, ImageListItemBar, IconButton, Tooltip } from "@mui/material";
 import { MdInfo } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { useStore } from "../store/store";
+import { styled } from "@mui/material/styles";
+import { tooltipClasses } from "@mui/material/Tooltip";
 
 const Image_path = "https://image.tmdb.org/t/p/w500/";
 
@@ -10,9 +12,8 @@ function ImgList({ movies }) {
 	const filter = useStore((state) => state.filter);
 
 	const history = useNavigate();
-
 	const seeDetail = (item) => {
-		history("/movies/" + item.title, { state: { item } });
+		history(`/movies/${item.id}`);
 	};
 
 	return (
@@ -22,7 +23,7 @@ function ImgList({ movies }) {
 					.filter((item) => item.title.toLowerCase().includes(filter.toLowerCase()))
 					.map((item) => (
 						<Grid item xs={6} sm={4} md={3} key={item.id}>
-							<ImageListItem>
+							<ImageListItem style={{ height: "100%" }}>
 								<img
 									src={`${Image_path + item.poster_path}?w=248&fit=crop&auto=format`}
 									srcSet={`${Image_path + item.poster_path}?w=248&fit=crop&auto=format&dpr=2 2x`}
@@ -31,17 +32,19 @@ function ImgList({ movies }) {
 									className="rounded-lg"
 								/>
 								<ImageListItemBar
+									onClick={() => seeDetail(item)}
 									className="rounded-b-lg"
 									title={item.title}
 									subtitle={item.overview}
 									actionIcon={
-										<IconButton
-											sx={{ color: "rgba(255, 255, 255, 0.54)" }}
-											aria-label={`info about ${item.title}`}
-											onClick={() => seeDetail(item)}
-										>
-											<MdInfo />
-										</IconButton>
+										<LightTooltip title="Detail" placement="top-end">
+											<IconButton
+												sx={{ color: "rgba(255, 255, 255, 0.54)" }}
+												aria-label={`info about ${item.title}`}
+											>
+												<MdInfo />
+											</IconButton>
+										</LightTooltip>
 									}
 								/>
 							</ImageListItem>
@@ -53,3 +56,14 @@ function ImgList({ movies }) {
 }
 
 export default ImgList;
+
+const LightTooltip = styled(({ className, ...props }) => <Tooltip {...props} classes={{ popper: className }} />)(
+	({ theme }) => ({
+		[`& .${tooltipClasses.tooltip}`]: {
+			backgroundColor: theme.palette.common.white,
+			color: "rgba(0, 0, 0, 0.87)",
+			boxShadow: theme.shadows[1],
+			fontSize: 11,
+		},
+	})
+);

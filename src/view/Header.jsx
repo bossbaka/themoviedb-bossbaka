@@ -1,13 +1,14 @@
-import React, { useState } from "react";
-import { Box, AppBar, Toolbar, Typography, InputBase, IconButton, Badge } from "@mui/material";
+import React from "react";
+import { Box, AppBar, Toolbar, Typography, InputBase, IconButton, Badge, Container } from "@mui/material";
 import { MdSearch, MdShoppingCart } from "react-icons/md";
 import { styled, alpha } from "@mui/material/styles";
-import { Link, useLocation } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useStore } from "../store/store";
 
 function Header() {
 	const filter = useStore((state) => state.filter);
 	const setFilter = useStore((state) => state.setFilter);
+	const cartTotalItems = useStore((state) => state.cartTotalItems);
 
 	const handleChange = (e) => {
 		setFilter(e.target.value);
@@ -16,32 +17,36 @@ function Header() {
 	return (
 		<Box sx={{ flexGrow: 1 }}>
 			<AppBar position="static" sx={{ backgroundColor: "secondary" }}>
-				<Toolbar>
-					<Typography
-						variant="h6"
-						noWrap
-						component="div"
-						sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
-					>
-						<Link to="/">THE MOVIE DB </Link>
-					</Typography>
-					<Search>
-						<SearchIconWrapper>
-							<MdSearch />
-						</SearchIconWrapper>
-						<StyledInputBase
-							placeholder="Search…"
-							inputProps={{ "aria-label": "search" }}
-							value={filter}
-							onChange={handleChange}
-						/>
-					</Search>
-					<IconButton style={{ marginLeft: "20px", color: "white" }}>
-						<Badge badgeContent={0} color="error">
-							<MdShoppingCart />
-						</Badge>
-					</IconButton>
-				</Toolbar>
+				<Container maxWidth="xl">
+					<Toolbar style={{ padding: 0 }}>
+						<Typography
+							variant="h6"
+							noWrap
+							component="div"
+							sx={{ flexGrow: 1, display: { xs: "none", sm: "block" } }}
+						>
+							<Link to="/">THE MOVIE DB</Link>
+						</Typography>
+						<Search>
+							<SearchIconWrapper>
+								<MdSearch />
+							</SearchIconWrapper>
+							<StyledInputBase
+								placeholder="Movie Title"
+								inputProps={{ "aria-label": "search" }}
+								value={filter}
+								onChange={handleChange}
+							/>
+						</Search>
+						<Link to="/cart">
+							<IconButton style={{ marginLeft: "20px", color: "white" }}>
+								<Badge badgeContent={cartTotalItems} color="error">
+									<MdShoppingCart />
+								</Badge>
+							</IconButton>
+						</Link>
+					</Toolbar>
+				</Container>
 			</AppBar>
 		</Box>
 	);

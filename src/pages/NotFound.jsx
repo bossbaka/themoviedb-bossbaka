@@ -3,8 +3,6 @@ import { Box, Button, Typography } from "@mui/material";
 import { lightBlue } from "@mui/material/colors";
 import { useNavigate } from "react-router-dom";
 
-const primary = lightBlue[600];
-
 function NotFound() {
 	const navigate = useNavigate();
 

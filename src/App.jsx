@@ -1,6 +1,5 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { createTheme, ThemeProvider } from "@mui/material/styles";
-import { lightBlue, brown } from "@mui/material/colors";
 import Layout from "./view/Layout";
 import Home from "./pages/Home";
 import MovieDetail from "./pages/MovieDetail";
@@ -39,7 +38,7 @@ function App() {
 					<Routes>
 						<Route path="/" element={<Layout />}>
 							<Route index element={<Home />} />
-							<Route path="/movies/:title" element={<MovieDetail />} />
+							<Route path="/movies/:id" element={<MovieDetail />} />
 							<Route path="/cart" element={<Cart />} />
 						</Route>
 						<Route path="*" element={<NotFound />} />

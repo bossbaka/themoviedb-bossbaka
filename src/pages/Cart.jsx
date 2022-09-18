@@ -1,25 +1,26 @@
-import React, { useState, useEffect } from "react";
-import { Typography, Button, Grid, Stack } from "@mui/material";
+import React from "react";
 import { useStore } from "../store/store";
+import CartList from "../components/CartList";
+import BreadcrumbsComponents from "../components/BreadcrumbsComponents";
+import { Grid, ImageListItem, ImageListItemBar, IconButton, Button, Typography, Stack } from "@mui/material";
 
 function Cart() {
-	const [timer, setCounter] = useState(60);
+	const cartItems = useStore((state) => state.cartItems);
 
-	useEffect(() => {
-		const TimerInt =
-			timer > 0 &&
-			setInterval(() => {
-				setCounter((time) => time - 1);
-			}, 1000);
-		return () => {
-			clearInterval(TimerInt);
-		};
-	}, [timer]);
+	if (cartItems.length === 0) {
+		return (
+			<>
+				<BreadcrumbsComponents before="Home" latest="Cart" />
+				<Typography variant="h4" style={{ color: "white", margin: "30px 0" }}>
+					No Items
+				</Typography>
+			</>
+		);
+	}
 
 	return (
 		<div>
-			Cart <Button variant="contained">CHECKOUT</Button>
-			{timer}
+			<CartList cartItems={cartItems} />
 		</div>
 	);
 }

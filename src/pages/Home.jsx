@@ -1,31 +1,32 @@
 import { useEffect, useRef } from "react";
 import { useStore } from "../store/store";
-import Button from "@mui/material/Button";
 import ImgList from "../components/ImgList";
+import { Typography } from "@mui/material";
 
 function Home() {
-	const effectRan = useRef(false);
 	const movies = useStore((state) => state.movies);
 	const fetchMovies = useStore((state) => state.fetchMovies);
 
+	const effectRan = useRef(false);
 	useEffect(() => {
-		console.log("ran");
 		if (effectRan.current === true) {
 			fetchMovies();
 		}
 		return () => {
-			console.log("un");
 			effectRan.current = true;
 		};
 	}, []);
 
 	if (movies.length === 0) {
-		return <div>Empty</div>;
+		return (
+			<Typography variant="h4" style={{ color: "white", margin: "30px 0" }}>
+				Empty
+			</Typography>
+		);
 	}
 
-	console.log(movies);
 	return (
-		<div style={{ margin: "50px" }}>
+		<div>
 			<ImgList movies={movies} />
 		</div>
 	);

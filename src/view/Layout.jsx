@@ -9,9 +9,7 @@ function Layout() {
 			<Header />
 			<Container maxWidth="xl">
 				<main className="flex-1 mt-7">
-					<div className="min-h-screen">
-						<Outlet />
-					</div>
+					<Outlet />
 				</main>
 			</Container>
 		</>

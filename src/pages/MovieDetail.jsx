@@ -1,45 +1,83 @@
-import React from "react";
-import { useLocation, useNavigate } from "react-router-dom";
-import { Typography, Button, Grid, Stack } from "@mui/material";
+import React, { useEffect } from "react";
+import { useNavigate, useParams } from "react-router-dom";
+import { Typography, Button, Grid, Chip } from "@mui/material";
+import { useStore } from "../store/store";
+import Image from "mui-image";
+import BreadcrumbsComponents from "../components/BreadcrumbsComponents";
 
 const Image_path = "https://image.tmdb.org/t/p/w500/";
 
 function MovieDetail() {
-	const location = useLocation();
 	const history = useNavigate();
+	const params = useParams();
+	const movie = useStore((state) => state.movie);
+	const fetchMovie = useStore((state) => state.fetchMovie);
+	const addToCart = useStore((state) => state.addToCart);
 
-	const onAddToCart = () => {
+	useEffect(() => {
+		fetchMovie(params.id);
+	}, [params.id]);
+
+	let newObjMovie = movie;
+	newObjMovie = { ...newObjMovie, price: 250 };
+
+	const handleAddToCart = () => {
 		history("/cart");
+		addToCart(newObjMovie);
 	};
 
-	console.log(location);
+	console.log(newObjMovie);
 
 	return (
-		<div className="h-screen">
-			<div
-				className="banner-detail"
-				style={{ backgroundImage: `url(${Image_path + location.state.item.backdrop_path})` }}
-			>
-				<Stack direction="row" alignItems="center" spacing={0}>
-					<Grid container spacing={2}>
-						<Grid item xs={8}>
-							<Typography variant="h3" gutterBottom>
-								{location.state.item.title}
-							</Typography>
-							{location.state.item.release_date}
-							<Typography variant="subtitle1" gutterBottom>
-								{location.state.item.overview}
-							</Typography>
-							<Button variant="contained" onClick={onAddToCart}>
-								ADD TO CART
-							</Button>
-						</Grid>
+		<div>
+			<BreadcrumbsComponents before="Home" latest="Movie" />
 
-						<Grid item xs={4}>
-							poster_path
-						</Grid>
+			<div style={{ margin: "30px 0" }}>
+				<Grid container spacing={2} alignItems="center">
+					<Grid item xs={12} sm={6} md={6}>
+						<Typography variant="h3" gutterBottom>
+							{newObjMovie.title}
+						</Typography>
+
+						<Typography variant="h4" gutterBottom>
+							{newObjMovie.price} Baht
+						</Typography>
+
+						<div style={{ margin: "20px 0" }}>
+							<Typography variant="subtitle2" gutterBottom style={{ marginLeft: "5px" }}>
+								Release date : {newObjMovie.release_date}
+							</Typography>
+							{newObjMovie.genres.map((g, index) => (
+								<Chip
+									key={index}
+									label={g.name}
+									size="small"
+									color="primary"
+									style={{ marginRight: "5px" }}
+								/>
+							))}
+						</div>
+						<Typography variant="subtitle1" gutterBottom>
+							{newObjMovie.overview}
+						</Typography>
+
+						<Button
+							variant="contained"
+							size="large"
+							fullWidth
+							onClick={handleAddToCart}
+							style={{ marginTop: "30px" }}
+						>
+							ADD TO CART
+						</Button>
 					</Grid>
-				</Stack>
+
+					<Grid item xs={12} sm={6} md={6}>
+						<div className="flex justify-center	">
+							<Image src={Image_path + newObjMovie.poster_path} duration={1000} width={350} />
+						</div>
+					</Grid>
+				</Grid>
 			</div>
 		</div>
 	);
