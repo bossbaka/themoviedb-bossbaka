@@ -27,7 +27,7 @@ export const useStore = create(
 			cartItems: [],
 			cartTotalItems: 0,
 			cartTotalPrice: 0,
-			discount: 0,
+			cartDiscount: 0,
 			addToCart: (data) => {
 				const newData = { ...data, quantity: 1 };
 				const foundIndex = get().cartItems.findIndex((item) => item.id === data.id);
@@ -56,27 +56,31 @@ export const useStore = create(
 				get().updateTotalPrice();
 			},
 			updateTotalPrice: () => {
-				let { total, qty } = get().cartItems.reduce(
+				let { total, qty, discount } = get().cartItems.reduce(
 					(cartTotal, cartItem) => {
-						const { quantity, price, discount } = cartItem;
+						const { quantity, price } = cartItem;
 						const totalPriceOfItem = price * quantity;
-						// if (quantity > 3) {
-						// 	(totalPriceOfItem * 10) / 100;
-						// 	cartTotal.total -= totalPriceOfItem;
-						// } else if (quantity > 5) {
-						// 	(totalPriceOfItem * 20) / 100;
-						// 	cartTotal.total -= totalPriceOfItem;
-						// }
+
+						if (quantity > 3) {
+							const totalDiscount10per = (totalPriceOfItem * 10) / 100;
+							cartTotal.discount = totalPriceOfItem - totalDiscount10per;
+							if (quantity > 5) {
+								const totalDiscount20per = (totalPriceOfItem * 20) / 100;
+								cartTotal.discount = totalPriceOfItem - totalDiscount20per;
+							}
+						}
+
 						cartTotal.total += totalPriceOfItem;
 						cartTotal.qty += quantity;
 
 						return cartTotal;
 					},
-					{ total: 0, qty: 0 }
+					{ total: 0, qty: 0, discount: 0 }
 				);
 				set({
 					cartTotalItems: qty,
 					cartTotalPrice: total,
+					cartDiscount: discount,
 				});
 			},
 			clearAllFromCart: () => set({ cartItems: [], cartTotalItems: 0 }),
