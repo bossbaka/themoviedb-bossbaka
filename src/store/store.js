@@ -2,8 +2,7 @@ import create from "zustand";
 import axios from "axios";
 import { persist } from "zustand/middleware";
 
-//const apiKey = import.meta.env.VITE_API_KEY;
-const apiKey = "f8c6cf14d8a5eff95ed59c269a996c60";
+const apiKey = import.meta.env.VITE_API_KEY;
 
 export const useStore = create(
 	persist(

@@ -1,5 +1,8 @@
 # themoviedb-bossbaka
 
-yarn dev or npm run dev
+**tech stack in project:** <br>
 
-run port http://localhost:3000/
+-   react <br>
+-   mui <br>
+-   axios <br>
+-   zustand <br>
