@@ -26,8 +26,6 @@ function MovieDetail() {
 		addToCart(newObjMovie);
 	};
 
-	console.log(newObjMovie);
-
 	return (
 		<div>
 			<BreadcrumbsComponents before="Home" latest="Movie" />
@@ -36,18 +34,18 @@ function MovieDetail() {
 				<Grid container spacing={2} alignItems="center">
 					<Grid item xs={12} sm={6} md={6}>
 						<Typography variant="h3" gutterBottom>
-							{newObjMovie.title}
+							{newObjMovie?.title}
 						</Typography>
 
 						<Typography variant="h4" gutterBottom>
-							{newObjMovie.price} Baht
+							{newObjMovie?.price} Baht
 						</Typography>
 
 						<div style={{ margin: "20px 0" }}>
 							<Typography variant="subtitle2" gutterBottom style={{ marginLeft: "5px" }}>
-								Release date : {newObjMovie.release_date}
+								Release date : {newObjMovie?.release_date}
 							</Typography>
-							{newObjMovie.genres.map((g, index) => (
+							{newObjMovie?.genres?.map((g, index) => (
 								<Chip
 									key={index}
 									label={g.name}
@@ -58,7 +56,7 @@ function MovieDetail() {
 							))}
 						</div>
 						<Typography variant="subtitle1" gutterBottom>
-							{newObjMovie.overview}
+							{newObjMovie?.overview}
 						</Typography>
 
 						<Button
