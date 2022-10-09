@@ -1,4 +1,4 @@
-import { useEffect, useRef } from "react";
+import { useEffect } from "react";
 import { useStore } from "../store/store";
 import ImgList from "../components/ImgList";
 import { Typography } from "@mui/material";
@@ -7,14 +7,8 @@ function Home() {
 	const movies = useStore((state) => state.movies);
 	const fetchMovies = useStore((state) => state.fetchMovies);
 
-	const effectRan = useRef(false);
 	useEffect(() => {
-		if (effectRan.current === true) {
-			fetchMovies();
-		}
-		return () => {
-			effectRan.current = true;
-		};
+		fetchMovies();
 	}, []);
 
 	if (movies.length === 0) {
